@@ -1,0 +1,23 @@
+# Версия taskfile
+version: '3'
+
+vars:
+  GOOSE_VERSION: 'v3.27'
+
+  BIN_DIR: '{{.ROOT_DIR}}/bin'
+  GOOSE: '{{.BIN_DIR}}/goose'
+
+tasks:
+  install-goose:
+# Если все команды из status завершаются успешно (код выхода 0),
+# то Task считает задачу уже выполненной и пропускает её.
+    status:
+      # -x проверяет, что файл существует и является исполняемый
+      - test -x {{.GOOSE}}
+    desc: "Устанавливаем goose в ./bin"
+    cmds:
+      - | 
+        mkdir -p {{.BIN_DIR}}
+        echo "Устанавливаем goose {{.GOOSE}}..."
+        GOBIN={{.BIN_DIR}} go install github.com/pressly/goose/v3/cmd/goose@{{.GOOSE_VERSION}}
+        
